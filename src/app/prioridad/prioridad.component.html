@@ -1,0 +1,17 @@
+<div class="prioridad m-0 p-0 mx-auto font-weight-light text-center">
+
+  <i class="oi oi-chevron-top"
+     [class.resaltada]="prioridad < MAXPRIORIDAD"
+     [class.fueralimites]="prioridad > MAXPRIORIDAD"
+     (click)="addPrioridad()"></i>
+
+  <span class="align-middle p-2">{{prioridad}}</span>
+
+  <i class="oi oi-chevron-bottom"
+     (click)="decreasePrioridad()"
+     [ngClass]="{
+     'resaltada': prioridad > MINPRIORIDAD,
+     'fueralimites': prioridad <= MINPRIORIDAD
+     }"
+  ></i>
+</div>
