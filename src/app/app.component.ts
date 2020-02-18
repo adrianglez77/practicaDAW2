@@ -13,7 +13,7 @@ export class AppComponent {
     user: "Adrian",
     items: [
       {id: "aa", action:"Estudiar daw", done: false, prioridad : 3} ,
-      {id: "ab", action:"Ver la tv", done: true, prioridad : 2} ,
+      {id: "ab", action:"Ver la tv", done: false, prioridad : 2} ,
       {id: "ac", action:"Entrenar", done: false, prioridad : 6} ,
       {id: "ad", action:"Cocinar", done: false, prioridad : 1},
     ]
