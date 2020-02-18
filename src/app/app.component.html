@@ -15,17 +15,17 @@
       </div>
     </div>
 
-    <table class="table table-striped table-hover table-sm">
+    <table class="table table-striped table-hovertable-hover table-sm text-center">
       <thead>
       <tr class="row">
         <th class="col-3">Tarea
-          <span class="oi oi-chevron-top iconStyle" [class.iconActive]="ordenar && !arriba" (click)="ordenaTareas()" ></span>
-          <span class="oi oi-chevron-bottom iconStyle" [class.iconActive]="ordenar && arriba" (click)="ordenaTareas(false)"></span>
+          <span class="oi oi-chevron-top iconStyle" (click)="ordenaTareas()" ></span>
+          <span class="oi oi-chevron-bottom iconStyle" (click)="ordenaTareas(false)"></span>
         </th>
         <th class="col-3">¿Finalizada?</th>
         <th class="col-3">Prioridad
-          <span class="oi oi-chevron-top iconStyle" [class.iconActive]="ordenar && !arriba" (click)="ordenaTareasPrioridad(false)" ></span>
-          <span class="oi oi-chevron-bottom iconStyle" [class.iconActive]="ordenar && arriba" (click)="ordenaTareasPrioridad()"></span>
+          <span class="oi oi-chevron-top iconStyle" [class.iconActive]="!ordenar && !arriba" (click)="ordenaTareasPrioridad(false)" ></span>
+          <span class="oi oi-chevron-bottom iconStyle" [class.iconActive]="!ordenar && arriba" (click)="ordenaTareasPrioridad()"></span>
         </th>
         <th class="col-3">Eliminar</th>
       </tr>
@@ -34,15 +34,15 @@
       <tbody>
       <tr class="row" *ngFor=" let i=index; let item of model.items">
         <td class="col-3">{{item.action}}</td>
-        <td class="col-3"> {{item.done}}</td>
-        <td class="col-3"> <app-prioridad [prioridad]="item.prioridad"
-                                          (nuevaPrioridad)="nuevaPrioridad($event,item.id)"
-        >
-        </app-prioridad>
+        <td class="col-3"> {{item.done}}
           <input type="checkbox" [(ngModel)]="item.done">
         </td>
+        <td class="col-3"> <app-prioridad [prioridad]="item.prioridad"
+                                          (nuevaPrioridad)="nuevaPrioridad($event,item.id)">
+          </app-prioridad>
+        </td>
         <td class="col-3">
-          <span class="oi oi-delete iconStyle" aria-hidden="true" (click)="eliminarTarea(item.id)"> Eliminar</span></td>
+          <span class="oi oi-delete iconStyle" aria-hidden="true" (click)="eliminarTarea(item.id)"></span></td>
 
       </tr>
       </tbody>
