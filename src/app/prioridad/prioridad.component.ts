@@ -1,35 +1,28 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 @Component({
   selector: 'app-prioridad',
-  templateUrl: './prioridad.component.html',
-  styleUrls: ['./prioridad.component.scss']
+  template: `
+    <div class="prioridad m-0 p-0 mx-auto font-weight-light text-center">
+      <i class="oi oi-chevron-top"
+         [class.resaltada]="prioridad<10"
+         [class.fueralimites]="prioridad >9"
+         (click)="voto(1)"></i>
+      <span class="align-middle">{{prioridad}}</span>
+      <i class="oi oi-chevron-bottom"
+         [ngClass]="{'resaltada':prioridad>0, 'fueralimites':prioridad<1}"
+         (click)="voto(-1)"></i>
+    </div>
+  `,
+  styleUrls:['prioridad.component.scss']
+
 })
-export class PrioridadComponent implements OnInit {
+export class PrioridadComponent {
+  @Input() prioridad=0;
+  @Output() nuevaPrioridad = new EventEmitter();
 
-  @Input() prioridad: number;
-  @Output() newPrioridadEmitter = new EventEmitter();
-  MAXPRIORIDAD:number = 10;
-  MINPRIORIDAD:number = 0;
-
-
-  constructor() {
-
+  voto(number: number) {
+    this.prioridad+=number;
+    this.nuevaPrioridad.emit(this.prioridad);
   }
-
-  ngOnInit() {
-
-  }
-
-  addPrioridad(){
-    this.prioridad = Math.min(this.MAXPRIORIDAD, ++this.prioridad);
-    this.newPrioridadEmitter.emit(this.prioridad);
-  }
-
-  decreasePrioridad(){
-    this.prioridad = Math.max(this.MINPRIORIDAD, --this.prioridad);
-    this.newPrioridadEmitter.emit(this.prioridad);
-  }
-
-
 }
