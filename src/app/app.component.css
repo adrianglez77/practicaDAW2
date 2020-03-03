@@ -1,0 +1,25 @@
+th, td {
+  text-align: center;
+}
+
+th {
+  background-color: goldenrod;
+  border: 2px solid black;
+  margin-left: 0.2em;
+}
+th:hover {
+  background-color: #ae8319;
+}
+
+.iconStyle {
+  cursor: pointer;
+}
+.iconStyle:hover {
+  color: red;
+}
+
+.iconActive {
+  color: red;
+}
+
+/*# sourceMappingURL=app.component.css.map */

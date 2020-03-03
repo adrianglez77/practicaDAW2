@@ -1,0 +1,13 @@
+<label>
+  <input type="text" placeholder="Buscar..." class="form-control" (keyup)="tecla($event)">
+</label>
+
+
+<div class="p-3 bg-dark border" *ngIf="flickData && text.length > 1">
+  <h1 class="text-white mb-3">Items</h1>
+  <div class="row">
+    <article class="col-12 col-md-4 col-lg-3" *ngFor="let item of flickData">
+      <app-photo-flick [item]="item"></app-photo-flick>
+    </article>
+  </div>
+</div>

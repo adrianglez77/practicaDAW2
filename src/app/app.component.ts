@@ -1,80 +1,105 @@
-import { Component } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import * as uuid from 'uuid';
+import {Task} from './model/task';
+import {TodoService} from './todo.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-  title = 'Todo List';
+
+export class AppComponent implements OnDestroy{
+  title = 'Lista de';
   arriba: boolean;
   ordenar:boolean;
+
   model = {
-    user: "Adrian",
-    items: [
-      {id: "aa", action:"Estudiar daw", done: false, prioridad : 3} ,
-      {id: "ab", action:"Ver la tv", done: false, prioridad : 2} ,
-      {id: "ac", action:"Entrenar", done: false, prioridad : 6} ,
-      {id: "ad", action:"Cocinar", done: false, prioridad : 1},
-    ]
+    user:   "Adrian",
+    items: []
   };
 
-  mostrarTodas=true;
+  private subscription: Subscription;
 
-  constructor(){
-    this.ordenaTareas();
+  constructor(private todoService:TodoService) {
+    this.subscription = this.todoService.getItems().subscribe((items) => {
+      this.model.items = items;
+      this.ordenaTareas();
+    });
   }
 
-
-  TareasIncompletas(){
-    let count=0;
-    if(this.model.items)
-        this.model.items.forEach((item )=>!item.done? count ++:true);
-    return count;
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
-  eliminarTarea(id: string) {
+  /**
+   * Sort
+   */
+
+  ordenaTareas(arriba: boolean = true){
+    this.model.items = this.model.items.sort( (a, b) => {
+      if(a.action.toLocaleLowerCase() < b.action.toLocaleLowerCase()) {
+        if (arriba) {
+          return -1;
+        } else {
+          return 1
+        }
+      }
+      else if (a.action.toLocaleLowerCase() > b.action.toLocaleLowerCase()){
+        if (arriba) {
+          return 1;
+        } else {
+          return -1
+        }
+      }
+      else return 0
+    });
+    this.ordenar = true;
+    this.arriba = arriba;
+  }
+
+  ordenaTareasPrioridad(arriba: boolean = true){
+    if (arriba) {
+      this.model.items = this.model.items.sort( (a, b) => (b.prioridad - a.prioridad));
+    } else {
+      this.model.items = this.model.items.sort( (a, b) => (a.prioridad - b.prioridad));
+    }
+    this.ordenar = false;
+    this.arriba = arriba;
+  }
+
+  /**
+   * Add / Remove / Complete
+   */
+
+  addItem (action){
+    this.model.items.push({action: action.value, done: false, id: uuid.v4(), prioridad: 0});
+    if(this.ordenar){
+      this.ordenaTareas(this.arriba);
+    }else {
+      this.ordenaTareasPrioridad(this.arriba);
+    }
+  }
+
+  eliminarTarea(id: number) {
     this.model.items = this.model.items.filter( item => {
       return item.id != id;
     })
   }
 
-  addItem (action){
-    let nuevoId=Math.random().toString(36).substr(2,10);
-    this.model.items.push({action: action.value, done: false, prioridad : 1, id: nuevoId});
-    this.ordenaTareas();
-
+  TareasIncompletas(){
+    let count=0;
+    if(this.model.items)
+      this.model.items.forEach((item )=>!item.done? count ++:true);
+    return count;
   }
 
-  nuevaPrioridad($event: any,id) {
-    //console.log(i);
-    let i= this.model.items.findIndex((item:any)=>item.id==id, id);
-    this.model.items[i].prioridad=$event;
-  }
-
-  ordenaTareas(arriba: boolean = true){
-    this.model.items = this.model.items.sort( (a, b) => {
-      if(a.action.toLocaleLowerCase() < b.action.toLocaleLowerCase() && arriba) return -1;
-      if(a.action.toLocaleLowerCase() < b.action.toLocaleLowerCase() && !arriba) return 1;
-
-      if (a.action.toLocaleLowerCase() > b.action.toLocaleLowerCase() && arriba) return 1;
-      if (a.action.toLocaleLowerCase() > b.action.toLocaleLowerCase() && !arriba) return -1;
-      else return 0
-    });
-    this.arriba = arriba;
-    this.ordenar = true;
-    //console.log(this.model.items);
-  }
-
-  ordenaTareasPrioridad(ascendent: boolean = true){
-    if (ascendent) {
-      this.model.items = this.model.items.sort( (a, b) => (b.prioridad - a.prioridad));
+  nuevaPrioridad($event: any, id: number) {
+    const index = this.model.items.findIndex(item => item.id == id, id)
+    this.model.items[index].prioridad = $event;
+    if(!this.arriba){
+      this.ordenaTareasPrioridad(this.arriba);
     }
-    if(!ascendent){
-      this.model.items = this.model.items.sort( (a, b) => (a.prioridad - b.prioridad));
-    }
-    this.arriba = ascendent;
-    this.ordenar = false;
   }
-
 }
