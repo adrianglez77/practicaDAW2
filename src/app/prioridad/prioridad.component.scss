@@ -1,3 +1,5 @@
+@import "../../../node_modules/bootstrap/scss/functions.scss";
+@import "../../../node_modules/bootstrap/scss/_variables.scss";
 
 .prioridad {
   font-size: 0.9em;
@@ -5,7 +7,7 @@
 }
 
 .resaltada {
-  color: #dc3545 !important;
+  color: $red !important;
 }
 
 .fueralimites {
@@ -13,8 +15,8 @@
 }
 
 .oi {
-  color: #007bff;
-}
-.oi:hover {
-  cursor: pointer;
+  color: $blue;
+  &:hover{
+    cursor: pointer;
+  }
 }
